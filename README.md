@@ -36,5 +36,6 @@ Paste this into your apache config file. Be sure to enable `mod_proxy`.
 Under debian, you can paste the above in `/etc/apache2/sites-available/nodeproxy`, then do
 
     a2enmod proxy
+    a2enmod proxy_http
     a2ensite nodeproxy
     /etc/init.d/apache2 restart # reload is not enough, needs restart due to new module
