@@ -74,7 +74,8 @@ http.createServer(function(request, response) {
 			if(filename == 'plug' && request.method == 'GET') {
 				var qbottom = parseInt(url.query.bottom);
 				if(url.query && url.query.chat) {
-					var chat = { type: 'http', user: url.query.user, chat: url.query.chat };
+					var d = new Date;
+					var chat = { type: 'http', user: url.query.user, chat: url.query.chat, ts: d.toLocaleString() }; // does this make sense?
 					broadcastChat(chat, function(error, result) {
 						bottomId = result.id;
 						response.writeHead(200);

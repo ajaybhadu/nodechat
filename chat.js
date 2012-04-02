@@ -14,10 +14,14 @@ function ChatBox(element, userName, baseUrl) {
 
 	var self = this;
 
+	this.formatDate = function(str) {
+		var d = new Date(str);
+		return d.toUTCString();
+		return str;
+	}
+
 	this.prepareChatString = function(chat) {
-		return '<div><b>'+(chat.type && chat.type == 'irc'?'<span style="color: green">&lt;'+chat.user+'&gt;</span>':(chat.type == 'game'?'':chat.user+':'))+'</b> '+(chat.type && chat.type == 'game'?convert_cube_string(chat.chat):encodeHTML(chat.chat))+
-			'<div class="timestamp">'+chat.ts+'</div>';
-			'</div>';
+		return '<div title="'+this.formatDate(chat.ts)+'"><b>'+(chat.type && chat.type == 'irc'?'<span style="color: green">&lt;'+chat.user+'&gt;</span>':(chat.type == 'game'?'':chat.user+':'))+'</b> '+(chat.type && chat.type == 'game'?convert_cube_string(chat.chat):encodeHTML(chat.chat))+			'</div>';
 	}
 
 	this.prependChat = function(chat) {

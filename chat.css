@@ -27,13 +27,6 @@
 	overflow-y: auto;
 	padding: 0 4px;
 }
-#chat .log .timestamp {
-	display: none;
-	float: right;
-}
-#chat .log div:hover .timestamp {
-	display: inline;
-}
 #chat .content {
 	width: 400px;
 	margin: 0;
