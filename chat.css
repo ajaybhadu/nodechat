@@ -1,0 +1,61 @@
+/**
+* le css file for le chatting hell
+* originally written by le vampirefrog
+* and modified by le Pupskuchen
+* I CAN CHANGE COLORS!
+**/
+
+#chat {
+	position: fixed;
+	right: 10px;
+	bottom: 0px;
+	z-index: 1000;
+	background: #101010;
+	color: #efefef;
+	border: 2px solid #375976;
+}
+#chat .title {
+	background: #375976;
+	padding: 4px;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+}
+#chat .log {
+	background: #101010;
+	height: 250px;
+	overflow-y: auto;
+	padding: 0 4px;
+}
+#chat .log .timestamp {
+	display: none;
+	float: right;
+}
+#chat .log div:hover .timestamp {
+	display: inline;
+}
+#chat .content {
+	width: 400px;
+	margin: 0;
+	padding: 0;
+}
+#chat .input {
+	background: white url('chat.png') no-repeat 0 0;
+	padding: 2px 2px 2px 26px;
+	border-top: 1px solid #375976;
+}
+#chat .input input {
+	width: 100%;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	height: 20px;
+}
+
+.color0 { color: #108030 } /* 0 = green */
+.color1 { color: #4466dd } /* 1 = blue */
+.color2 { color: #ffbb3e } /* 2 = yellow */
+.color3 { color: #ff3030 } /* 3 = red */
+.color4 { color: #808080 } /* 4 = gray */
+.color5 { color: #802b9f } /* 5 = magenta */
+.color6 { color: #fc800e } /* 6 = orange */

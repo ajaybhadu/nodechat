@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Node Chat</title>
+		<link rel="stylesheet" href="style.css">
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="chat.css">
+		<script type="text/javascript" src="chat.js"></script>
+		<script type="text/javascript">
+var box = new ChatBox($('#chat').get(0), 'test');
+		</script>
+	</head>
+	<body>
+		<div id="chat">
+			<div class="title">Chat</div>
+			<div class="content">
+				<div class="log">
+				</div>
+				<div class="input">
+					<input type="text">
+				</div>
+			</div>
+		</div>
+		
+		<div id="content">
+			User: <input type="text" onkeydown="if(event.which == 13) box.userName = this.value;">
+		</div>
+	</body>
+</html>

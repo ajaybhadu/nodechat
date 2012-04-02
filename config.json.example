@@ -1,0 +1,21 @@
+{
+	"port": 8087,
+	"irc": {
+		"server": "irc.example.net",
+		"nick": "NodeChatBot",
+		"channels": [ "#example" ],
+		"port": 6667
+	},
+	"sql": {
+		"hostname": "localhost",
+		"user": "root",
+		"password": "password",
+		"database": "database"
+	},
+	"sauer": {
+		"host": "localhost",
+		"port": 28888,
+		"path": "/log",
+		"auth": "admin:password"
+	}
+}
