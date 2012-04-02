@@ -6,6 +6,6 @@ A http chat application, with instant notifications. Uses [long polling](http://
 Installation/running
 --------------------
 
-  npm install db-mysql
-  npm install irc
-  node server.js
+    npm install db-mysql
+    npm install irc
+    node server.js
