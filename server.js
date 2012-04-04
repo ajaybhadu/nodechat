@@ -24,8 +24,8 @@ var ircclient = new irc.Client(config.irc.server, config.irc.nick, config.irc);
 ircclient.addListener('message', function(from, to, message) {
 	broadcastChat({ type: 'irc', user: from, chat: message });
 });
-ircclient.addListener('error', function(a, b, c) {
-	console.log(a, b, c);
+ircclient.addListener('error', function(err) {
+	console.log(err);
 });
 
 function ChatClient(request, response) {
@@ -94,13 +94,20 @@ http.createServer(function(request, response) {
 					clients.push(new ChatClient(request, response));
 				}
 			} else if(filename == 'log' && request.method == 'GET') {
-				sql.query().select('*').from('log').where(url.query&&url.query.top?'id < '+url.query.top:'1').order({id: false}).limit(msgLimit).execute(function(err, results, fields) {
-					if(results) {
-						response.writeHead(200, { 'Content-type': 'application/json' });
-						response.write(JSON.stringify(results));
-						response.end();
-					}
-				});
+				sql
+					.query()
+					.select('*')
+					.from('log')
+					.where(url.query&&url.query.top?'id < '+url.query.top:'1')
+					.order({id: false})
+					.limit(msgLimit)
+					.execute(function(err, results, fields) {
+						if(results) {
+							response.writeHead(200, { 'Content-type': 'application/json' });
+							response.write(JSON.stringify(results));
+							response.end();
+						}
+					});
 			} else {
 				response.writeHead(404);
 				response.write('<h1>404 Not Found</h1>');
@@ -151,4 +158,4 @@ function listenSauer() {
 		});
 	});
 }
-//listenSauer();
+if(config.sauer) listenSauer();
