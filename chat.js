@@ -1,7 +1,56 @@
-// foo
+// chat box browser-side javascript
 
 function encodeHTML(str) {
 	return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+}
+
+/** Sets or gets a cookie.
+ *
+ * @param key The cookie name.
+ * @param value The cookie value. Do not pass this argument when reading the cookie. Set to null or "" to unset the cookie.
+ * @param expiry Days to cookie expiry.
+ */
+function cookie(name, value, expiry) {
+	if(typeof(value) === 'undefined') { // get
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
+		for(var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+		}
+		return null;
+	} else { // set
+		var cookie_val = escape(value);
+		if(typeof(expiry) !== 'undefined' && expiry !== null) {
+			var exdate = new Date();
+			exdate.setDate(exdate.getDate() + expiry);
+			cookie_val += "; expires=" + exdate.toUTCString();
+		}
+		document.cookie = name + "=" + cookie_val + "; path=/";
+	}
+}
+
+/** Saves an application setting using either localStorage or cookies.
+ *
+ * Cookies are used when the localStorage object is unavailable.
+ *
+ * @param key The setting name.
+ * @param value The setting value.
+ * @param expiry The expiry, for cookies.
+ */
+function setting(key, value, expiry) {
+	if(typeof(value) === 'undefined') { // read
+		if(typeof(localStorage) !== 'undefined') return localStorage[key];
+		else return cookie(key);
+	} else { // write
+		if(typeof(localStorage) !== 'undefined') {
+			if(value === null) delete localStorage[key];
+			else localStorage[key] = value;
+		} else {
+			cookie(key, value, expiry);
+		}
+	}
 }
 
 function ChatBox(element, userName, baseUrl) {
@@ -101,8 +150,16 @@ function ChatBox(element, userName, baseUrl) {
 				$(this).val('');
 			}
 		}).focus();
-		$('.title', this.element).click(function(e) {
-			$(this).next('.content').toggle();
+		if(setting('chat_box_hidden') === 'true') $('.content', self.element).hide();
+		$('.title', self.element).click(function(e) {
+			var cnt = $(this).next('.content');
+			cnt.toggle();
+			if(cnt.is(':visible')) {
+				setting('chat_box_hidden', 'false');
+				self.scrollChatToBottom();
+			} else {
+				setting('chat_box_hidden', 'true');
+			}
 		});
 	});
 }
