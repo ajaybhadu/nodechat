@@ -27,6 +27,15 @@ ircclient.addListener('message', function(from, to, message) {
 ircclient.addListener('error', function(err) {
 	console.log(err);
 });
+ircclient.addListener('join', function(chan, nick, msg) {
+	broadcastChat({ type: 'irc', user: chan, chat: nick + ' has joined'});
+});
+ircclient.addListener('part', function(chan, nick, msg) {
+	broadcastChat({ type: 'irc', user: chan, chat: nick + ' has left'});
+});
+ircclient.addListener('quit', function(nick, reason, chans, msg) {
+	broadcastChat({ type: 'irc', user: chans.join(', '), chat: nick + ' has quit'+(reason?' ('+reason+')':'')});
+});
 
 function ChatClient(request, response) {
 	this.request = request;
@@ -35,7 +44,7 @@ function ChatClient(request, response) {
 		this.response.writeHead(200, { 'Content-type': 'application/json', 'Cache-control': 'no-cache, must-revalidate' });
 		this.response.write(JSON.stringify(chat));
 		this.response.end();
-	}
+	};
 }
 
 var clients = [];
