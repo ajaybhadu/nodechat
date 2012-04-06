@@ -4,7 +4,12 @@
 		"server": "irc.example.net",
 		"nick": "NodeChatBot",
 		"channels": [ "#example" ],
-		"port": 6667
+		"port": 6667,
+		"events" : {
+			"join": true,
+			"part": true,
+			"quit": true
+		}
 	},
 	"sql": {
 		"hostname": "localhost",

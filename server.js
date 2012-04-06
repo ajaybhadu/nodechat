@@ -27,13 +27,13 @@ ircclient.addListener('message', function(from, to, message) {
 ircclient.addListener('error', function(err) {
 	console.log(err);
 });
-ircclient.addListener('join', function(chan, nick, msg) {
+if(config.irc.events.join) ircclient.addListener('join', function(chan, nick, msg) {
 	broadcastChat({ type: 'irc', user: chan, chat: nick + ' has joined'});
 });
-ircclient.addListener('part', function(chan, nick, msg) {
+if(config.irc.events.part) ircclient.addListener('part', function(chan, nick, msg) {
 	broadcastChat({ type: 'irc', user: chan, chat: nick + ' has left'});
 });
-ircclient.addListener('quit', function(nick, reason, chans, msg) {
+if(config.irc.events.quit) ircclient.addListener('quit', function(nick, reason, chans, msg) {
 	broadcastChat({ type: 'irc', user: chans.join(', '), chat: nick + ' has quit'+(reason?' ('+reason+')':'')});
 });
 
