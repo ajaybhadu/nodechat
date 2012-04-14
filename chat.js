@@ -6,7 +6,7 @@ function encodeHTML(str) {
 
 // Converts urls into links
 function autoURLs(str) {
-	var re = /((https?:\/\/|www.)[^ \,\;\:\!\)\(\"\'\<\>\f\n\r\t\v]+)/g;
+	var re = /((https?:\/\/|www.)[^ \;\:\!\)\(\"\'\<\>\f\n\r\t\v]+)/g;
 	return str.replace(re, function($1) { return '<a href="'+encodeHTML($1.indexOf('://')==-1?'http://'+$1:$1)+'" target="_blank" title="Visit '+encodeHTML($1)+'">'+encodeHTML($1)+'<\/a>'; });
 }
 
