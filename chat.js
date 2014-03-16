@@ -1,13 +1,13 @@
 // chat box browser-side javascript
 
 function encodeHTML(str) {
-	return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;');
+	return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 // Converts urls into links
 function autoURLs(str) {
-	var re = /((https?:\/\/|www.)[^ \;\:\!\)\(\"\'\<\>\f\n\r\t\v]+)/g;
-	return str.replace(re, function($1) { return '<a href="'+encodeHTML($1.indexOf('://')==-1?'http://'+$1:$1)+'" target="_blank" title="Visit '+encodeHTML($1)+'">'+encodeHTML($1)+'<\/a>'; });
+	var re = /((https?:\/\/|www.)[^ \!\)\(\"\'\<\>\f\n\r\t\v]+)/g;
+	return str.replace(re, function($1) { return '<a href="'+($1.indexOf('://')==-1?'http://'+$1:$1)+'" target="_blank" title="Visit '+$1+'">'+$1+'<\/a>'; });
 }
 
 /** Sets or gets a cookie.
@@ -77,7 +77,7 @@ function ChatBox(element, userName, baseUrl) {
 
 	this.prepareChatString = function(chat) {
 		return '<div title="'+this.formatDate(chat.ts)+'">'+
-			'<b>'+(chat.type && chat.type == 'irc'?'<span style="color: green">'+(chat.user.indexOf('#') === 0?chat.user:'&lt;'+chat.user+'&gt;')+'</span>':(chat.type == 'game'?'':chat.user+':'))+'</b> '+
+			'<b>'+(chat.type && chat.type == 'irc'?'<span style="color: green">'+(chat.user.indexOf('#') === 0?chat.user:'&lt;'+chat.user+'&gt;')+'</span>':(chat.type=='ircaction'?'<span style="color: green">* '+chat.user+'</span> ':(chat.type == 'game'?'':chat.user+':')))+'</b> '+
 			(chat.type && chat.type == 'game'?convert_cube_string(chat.chat):autoURLs(encodeHTML(chat.chat)))+
 			'</div>';
 	}
