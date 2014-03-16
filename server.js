@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var http = require("http");
 var fs = require('fs');
 var path = require('path');
@@ -22,7 +23,35 @@ sql.on('error', function(error) {
 var irc = require('irc');
 var ircclient = new irc.Client(config.irc.server, config.irc.nick, config.irc);
 ircclient.addListener('message', function(from, to, message) {
-	broadcastChat({ type: 'irc', user: from, chat: message });
+	if(message == '!log') {
+		var lim = 5;
+		sql
+			.query()
+			.select('*')
+			.from('log')
+			.order({id: false})
+			.limit(lim)
+			.execute(function(err, results, fields) {
+				if(results) {
+					for(var c in ircclient.chans) {
+						for(var r = results.length - 1; r >= 0; r--) {
+							if(results[r].type == 'http')
+								ircclient.say(ircclient.chans[c].key, irc.colors.wrap('cyan', '['+results[r].user+']')+' '+results[r].chat);
+							else
+								ircclient.say(ircclient.chans[c].key, irc.colors.wrap('cyan', '<'+results[r].user+'>')+' '+results[r].chat);
+						}
+					}
+				}
+			});
+	} else if(message == '!help') {
+		for(var c in ircclient.chans)
+			ircclient.say(ircclient.chans[c].key, irc.colors.wrap('cyan', 'Commands: !help !log'));
+	} else {
+		broadcastChat({ type: 'irc', user: from, chat: message });
+	}
+});
+ircclient.addListener('action', function(from, to, message) {
+	broadcastChat({ type: 'ircaction', user: from, chat: message });
 });
 ircclient.addListener('error', function(err) {
 	console.log(err);
@@ -56,12 +85,14 @@ function broadcastChat(chat, cb) {
 	sql.query().insert('log', ['type', 'user', 'chat'], [ chat.type, chat.user, chat.chat ]).execute(function(error, result) {
 		if(cb) cb(error, result);
 		var c;
+		chat.id = result.id;
+		bottomId = result.id;
 		for(c in clients) {
 			clients[c].respond([chat]);
 		}
 		clients = [];
 
-		if(chat.type != 'irc') {
+		if(chat.type != 'irc' && chat.type != 'ircaction') {
 			for(c in ircclient.chans) {
 				ircclient.say(ircclient.chans[c].key, irc.colors.wrap('cyan', '<'+chat.user+'>')+' '+chat.chat);
 			}
@@ -115,6 +146,7 @@ http.createServer(function(request, response) {
 							response.writeHead(200, { 'Content-type': 'application/json' });
 							response.write(JSON.stringify(results));
 							response.end();
+							bottomId = results[0].id;
 						}
 					});
 			} else {
@@ -151,7 +183,6 @@ function listenSauer() {
 		res.on('data', function(chunk) {
 			resData += chunk;
 		}).on('end', function() {
-			console.log(resData);
 			try {
 				var res = JSON.parse(resData);
 				for(r in res) {
