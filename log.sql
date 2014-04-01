@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.1.61, for debian-linux-gnu (i486)
+-- MySQL dump 10.14  Distrib 5.5.30-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: chat
 -- ------------------------------------------------------
--- Server version	5.1.61-0+squeeze1
+-- Server version	5.5.30-MariaDB-mariadb1~wheezy-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `log`;
 CREATE TABLE `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `type` enum('http','irc','game') NOT NULL DEFAULT 'http',
+  `type` enum('http','irc','ircaction','game') DEFAULT NULL,
   `user` varchar(100) NOT NULL,
   `chat` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
@@ -41,4 +41,4 @@ CREATE TABLE `log` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-04-02 13:11:02
+-- Dump completed on 2014-04-01 21:55:20
